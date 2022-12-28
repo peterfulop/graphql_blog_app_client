@@ -1,0 +1,9 @@
+query GetProfile($userId: ID!) {
+  getProfile(userId: $userId) {
+    bio
+    user {
+      name
+      email
+    }
+  }
+}
