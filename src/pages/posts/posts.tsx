@@ -1,6 +1,5 @@
-import { Post } from '../../apollo/graphql-generated/types';
+import { useGetPostsQuery } from '../../apollo/queries/post/post.generated';
 import { PostElement } from '../../components/post/post';
-import { useGetPostsQuery } from '../../components/post/query/get-posts.generated';
 
 export const Posts = () => {
   const { data, error, loading } = useGetPostsQuery();
@@ -13,11 +12,11 @@ export const Posts = () => {
     return <div>Error on loading posts</div>;
   }
 
-  const posts = data.posts as Post[];
+  const posts = data.posts;
 
   return (
     <div>
-      {posts.map((post: Post) => (
+      {posts.map((post) => (
         <PostElement
           key={post.id}
           title={post.title}
