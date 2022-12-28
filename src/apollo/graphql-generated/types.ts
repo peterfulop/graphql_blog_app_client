@@ -105,6 +105,7 @@ export type Profile = {
   __typename?: 'Profile';
   bio: Scalars['String'];
   id: Scalars['ID'];
+  isMyProfile: Scalars['Boolean'];
   user: User;
   userId: Scalars['String'];
 };

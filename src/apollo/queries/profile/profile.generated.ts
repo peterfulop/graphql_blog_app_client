@@ -1,5 +1,5 @@
 /* eslint-disable */
-import * as Types from '../../../apollo/graphql-generated/types';
+import * as Types from '../../graphql-generated/types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
@@ -9,16 +9,24 @@ export type GetProfileQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetProfileQuery = { __typename?: 'Query', getProfile?: { __typename?: 'Profile', bio: string, user: { __typename?: 'User', name: string, email: string } } | null };
+export type GetProfileQuery = { __typename?: 'Query', getProfile?: { __typename?: 'Profile', bio: string, isMyProfile: boolean, user: { __typename?: 'User', name: string, email: string, posts: Array<{ __typename?: 'Post', id: string, title: string, content: string, published: boolean, createdAt: string }> } } | null };
 
 
 export const GetProfileDocument = gql`
     query GetProfile($userId: ID!) {
   getProfile(userId: $userId) {
     bio
+    isMyProfile
     user {
       name
       email
+      posts {
+        id
+        title
+        content
+        published
+        createdAt
+      }
     }
   }
 }

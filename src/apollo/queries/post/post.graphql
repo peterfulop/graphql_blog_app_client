@@ -1,0 +1,39 @@
+query getPosts {
+  posts {
+    id
+    title
+    content
+    createdAt
+    published
+    user {
+      email
+      name
+      id
+    }
+  }
+}
+
+mutation PostCreate($input: PostCreateInput!) {
+  postCreate(input: $input) {
+    post {
+      id
+      title
+      content
+    }
+    userErrors {
+      message
+    }
+  }
+}
+
+mutation PostPublish($input: PostPublishInput!) {
+  postPublish(input: $input) {
+    userErrors {
+      message
+    }
+    post {
+      id
+      published
+    }
+  }
+}

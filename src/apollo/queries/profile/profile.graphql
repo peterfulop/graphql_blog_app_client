@@ -1,9 +1,17 @@
 query GetProfile($userId: ID!) {
   getProfile(userId: $userId) {
     bio
+    isMyProfile
     user {
       name
       email
+      posts {
+        id
+        title
+        content
+        published
+        createdAt
+      }
     }
   }
 }

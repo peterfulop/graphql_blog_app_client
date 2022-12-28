@@ -1,0 +1,17 @@
+mutation Signin($input: CredentialsInput!) {
+  signin(input: $input) {
+    userErrors {
+      message
+    }
+    token
+  }
+}
+
+mutation Signup($input: SignupInput!) {
+  signup(input: $input) {
+    userErrors {
+      message
+    }
+    token
+  }
+}
