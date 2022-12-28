@@ -1,3 +1,4 @@
+import { usePostPublishMutation } from '../../apollo/queries/post/post.generated';
 import './Post.css';
 
 type PostProps = {
@@ -11,7 +12,9 @@ type PostProps = {
 };
 
 export const PostElement = (props: PostProps): JSX.Element => {
-  const { date, published, isMyProfile, title, user, content } = props;
+  const { date, published, isMyProfile, title, user, content, id } = props;
+
+  const [publishPostMutation] = usePostPublishMutation();
 
   const formatedDate = new Date(Number(date));
   return (
@@ -19,13 +22,37 @@ export const PostElement = (props: PostProps): JSX.Element => {
       className="Post"
       style={published === false ? { backgroundColor: 'hotpink' } : {}}
     >
-      {isMyProfile && published === false && (
-        <p className="Post__publish" onClick={() => null}>
+      {isMyProfile && !published && (
+        <p
+          className="Post__publish"
+          onClick={async () =>
+            await publishPostMutation({
+              variables: {
+                input: {
+                  postId: id,
+                  published: true,
+                },
+              },
+            })
+          }
+        >
           publish
         </p>
       )}
-      {isMyProfile && published === true && (
-        <p className="Post__publish" onClick={() => null}>
+      {isMyProfile && published && (
+        <p
+          className="Post__publish"
+          onClick={async () =>
+            await publishPostMutation({
+              variables: {
+                input: {
+                  postId: id,
+                  published: false,
+                },
+              },
+            })
+          }
+        >
           unpublish
         </p>
       )}

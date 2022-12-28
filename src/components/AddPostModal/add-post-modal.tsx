@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { useState } from 'react';
+import { Form, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 
 export default function AddPostModal() {
   const [show, setShow] = useState(false);
