@@ -1,4 +1,5 @@
 import { usePostPublishMutation } from '../../apollo/queries/post/post.generated';
+import EnStrings from '../../utilities/strings';
 import './Post.css';
 
 type PostProps = {
@@ -17,6 +18,13 @@ export const PostElement = (props: PostProps): JSX.Element => {
   const [publishPostMutation] = usePostPublishMutation();
 
   const formatedDate = new Date(Number(date));
+
+  const createdAtBy = `${
+    EnStrings.SCREENS.POSTS.POST.LABELS.CREATED_AT
+  } ${String(formatedDate).split(' ').splice(0, 3).join(' ')} ${
+    EnStrings.SCREENS.POSTS.POST.LABELS.BY
+  } ${user}`;
+
   return (
     <div
       className="Post"
@@ -36,7 +44,7 @@ export const PostElement = (props: PostProps): JSX.Element => {
             })
           }
         >
-          publish
+          {EnStrings.SCREENS.POSTS.POST.BUTTONS.PUBLISH}
         </p>
       )}
       {isMyProfile && published && (
@@ -53,15 +61,12 @@ export const PostElement = (props: PostProps): JSX.Element => {
             })
           }
         >
-          unpublish
+          {EnStrings.SCREENS.POSTS.POST.BUTTONS.UNPUBLISH}
         </p>
       )}
       <div className="Post__header-container">
         <h2>{title}</h2>
-        <h4>
-          Created At {`${formatedDate}`.split(' ').splice(0, 3).join(' ')} by{' '}
-          {user}
-        </h4>
+        <h4>{createdAtBy}</h4>
       </div>
       <p>{content}</p>
     </div>

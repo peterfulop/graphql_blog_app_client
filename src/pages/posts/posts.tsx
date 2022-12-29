@@ -1,18 +1,19 @@
 import { useGetPostsQuery } from '../../apollo/queries/post/post.generated';
 import { PostElement } from '../../components/post/post';
+import EnStrings from '../../utilities/strings';
 
 export const Posts = () => {
   const { data, error, loading } = useGetPostsQuery();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>{EnStrings.COMMONS.LOADING}</div>;
   }
 
   if (error || !data) {
-    return <div>Error on loading posts</div>;
+    return <div>{EnStrings.SCREENS.POSTS.ERRORS.ERROR_ON_LOADING}</div>;
   }
 
-  const posts = data.posts;
+  const { posts } = data;
 
   return (
     <div>

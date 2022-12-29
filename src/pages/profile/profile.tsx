@@ -2,26 +2,27 @@ import { useParams } from 'react-router';
 import { useGetProfileQuery } from '../../apollo/queries/profile/profile.generated';
 import AddPostModal from '../../components/AddPostModal/add-post-modal';
 import { PostElement } from '../../components/post/post';
+import EnStrings from '../../utilities/strings';
 
 export const Profile = () => {
   const { id } = useParams();
 
   if (!id) {
-    return <div>Mising UserId parameter</div>;
+    return <div>{EnStrings.SCREENS.POSTS.ERRORS.MISSING_USER_ID}</div>;
   }
 
-  const { data, loading, error } = useGetProfileQuery({
+  const { data, loading, error, refetch } = useGetProfileQuery({
     variables: {
       userId: id,
     },
   });
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>{EnStrings.COMMONS.LOADING}</div>;
   }
 
   if (error || !data) {
-    return <div>Error on loading posts</div>;
+    return <div>{EnStrings.SCREENS.POSTS.ERRORS.ERROR_ON_LOADING}</div>;
   }
 
   const { getProfile: profile } = data;
@@ -39,7 +40,11 @@ export const Profile = () => {
           <h1>{profile?.user.name}</h1>
           <p>{profile?.bio}</p>
         </div>
-        <div>{profile?.isMyProfile ? <AddPostModal /> : null}</div>
+        <div>
+          {profile?.isMyProfile ? (
+            <AddPostModal userId={id} refetch={refetch} />
+          ) : null}
+        </div>
       </div>
       <div>
         {profile?.user.posts.map((post) => {

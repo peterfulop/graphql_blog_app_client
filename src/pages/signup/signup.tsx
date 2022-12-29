@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useSignupMutation } from '../../apollo/queries/auth/auth.generated';
+import { sSTE } from '../../utilities/set-server-type-error';
+import EnStrings from '../../utilities/strings';
 
 export const Signup = () => {
   const [email, setEmail] = useState('');
@@ -15,6 +17,7 @@ export const Signup = () => {
     useSignupMutation();
 
   const resetForm = () => {
+    setError(null);
     setEmail('');
     setPassword('');
     setPasswordConfirm('');
@@ -42,11 +45,12 @@ export const Signup = () => {
 
   useEffect(() => {
     if (signupError) {
-      setError(signupError.message);
+      setError(EnStrings.ERRORS.SERVER_ERROR);
     }
     if (data) {
       if (data.signup.userErrors.length) {
-        setError(data.signup.userErrors[0].message);
+        const errMessage = sSTE(data.signup.userErrors[0].message);
+        setError(errMessage);
       }
       if (data.signup.token) {
         localStorage.setItem('token', data.signup.token);
@@ -59,7 +63,7 @@ export const Signup = () => {
     <div>
       <Form onSubmit={(e) => handleSubmit(e)}>
         <Form.Group className="mb-3">
-          <Form.Label>Name</Form.Label>
+          <Form.Label>{EnStrings.SCREENS.SIGNUP.FORM.LABELS.NAME}</Form.Label>
           <Form.Control
             type="text"
             placeholder=""
@@ -69,7 +73,7 @@ export const Signup = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Email</Form.Label>
+          <Form.Label>{EnStrings.SCREENS.SIGNUP.FORM.LABELS.EMAIL}</Form.Label>
           <Form.Control
             type="text"
             placeholder=""
@@ -79,7 +83,9 @@ export const Signup = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Password</Form.Label>
+          <Form.Label>
+            {EnStrings.SCREENS.SIGNUP.FORM.LABELS.PASSWORD}
+          </Form.Label>
           <Form.Control
             type="password"
             placeholder=""
@@ -89,7 +95,9 @@ export const Signup = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Password confirmation</Form.Label>
+          <Form.Label>
+            {EnStrings.SCREENS.SIGNUP.FORM.LABELS.PASSWORD_CONFIRM}
+          </Form.Label>
           <Form.Control
             type="password"
             placeholder=""
@@ -99,7 +107,7 @@ export const Signup = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-          <Form.Label>Bio</Form.Label>
+          <Form.Label>{EnStrings.SCREENS.SIGNUP.FORM.LABELS.BIO}</Form.Label>
           <Form.Control
             as="textarea"
             rows={3}
@@ -109,7 +117,9 @@ export const Signup = () => {
           />
         </Form.Group>
         {error && <p>{error}</p>}
-        <Button type="submit">Signup</Button>
+        <Button type="submit">
+          {EnStrings.SCREENS.SIGNUP.FORM.BUTTONS.SIGNUP_BUTTON}
+        </Button>
       </Form>
     </div>
   );

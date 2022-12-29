@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useSigninMutation } from '../../apollo/queries/auth/auth.generated';
+import { sSTE } from '../../utilities/set-server-type-error';
+import EnStrings from '../../utilities/strings';
 export const Signin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -10,6 +12,7 @@ export const Signin = () => {
     useSigninMutation();
 
   const resetForm = () => {
+    setError(null);
     setEmail('');
     setPassword('');
   };
@@ -29,11 +32,12 @@ export const Signin = () => {
 
   useEffect(() => {
     if (signinError) {
-      setError(signinError.message);
+      setError(EnStrings.ERRORS.SERVER_ERROR);
     }
     if (data) {
       if (data.signin.userErrors.length) {
-        setError(data.signin.userErrors[0].message);
+        const errMessage = sSTE(data.signin.userErrors[0].message);
+        setError(errMessage);
       }
       if (data.signin.token) {
         localStorage.setItem('token', data.signin.token);
@@ -46,7 +50,7 @@ export const Signin = () => {
     <div>
       <Form onSubmit={(e) => handleSubmit(e)}>
         <Form.Group className="mb-3">
-          <Form.Label>Email</Form.Label>
+          <Form.Label>{EnStrings.SCREENS.SIGNIN.FORM.LABELS.EMAIL}</Form.Label>
           <Form.Control
             type="text"
             placeholder=""
@@ -56,7 +60,9 @@ export const Signin = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Password</Form.Label>
+          <Form.Label>
+            {EnStrings.SCREENS.SIGNIN.FORM.LABELS.PASSWORD}
+          </Form.Label>
           <Form.Control
             type="password"
             placeholder=""
@@ -67,7 +73,7 @@ export const Signin = () => {
         </Form.Group>
         {error && <p>{error}</p>}
         <Button disabled={loading} type="submit">
-          Signin
+          {EnStrings.SCREENS.SIGNIN.FORM.BUTTONS.SIGNIN_BUTTON}
         </Button>
       </Form>
     </div>
